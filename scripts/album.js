@@ -1,7 +1,3 @@
-var setSong = function (songNumber) {
-
-};
-
 var createSongRow = function (songNumber, songName, songLength) {
   var template =
      '<tr class="album-view-song-item">'
@@ -10,8 +6,30 @@ var createSongRow = function (songNumber, songName, songLength) {
    + '  <td class="song-item-duration">' + songLength + '</td>'
    + '</tr>';
 
+  var handleSongClick = function () {
+    var clickedSongNumber = $(this).attr('data-song-number');
 
-  var $row = $(template);
+    //1. If there is a song currently playing, remove its pause button
+    if (currentlyPlayingSongNumber !== null) {
+      var currentlyPlayingCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
+      
+      currentlyPlayingCell.html(currentlyPlayingSongNumber);
+    }
+    
+    //2. If a song is playing other than the one clicked OR no song is playing: set the song number to new song, display the pause button on the clicked song, and set a new song to play.
+    if (clickedSongNumber !== currentlyPlayingSongNumber) {
+
+      currentlyPlayingSongNumber = clickedSongNumber;
+      setSong(songNumber);
+      currentSoundFile.play();
+      $(this).html(pauseButtonTemplate);
+
+      // 3. Otherwise there is a currently playing song and it was clicked. Now no song should be playing.
+    } else {
+      currentlyPlayingSongNumber = null;
+      $(this).html(clickedSongNumber);
+    }
+  };
 
   var onHover = function () {
     var songItem = $(this).find('.song-item-number');
@@ -33,30 +51,7 @@ var createSongRow = function (songNumber, songName, songLength) {
     }
   };
 
-
-
-  var handleSongClick = function () {
-    var clickedSongNumber = $(this).attr('data-song-number');
-
-    //1. If there is a song currently playing, remove its pause button
-    if (currentlyPlayingSongNumber !== null) {
-      var currentlyPlayingCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
-
-      currentlyPlayingCell.html(currentlyPlayingSongNumber);
-    }
-    
-    //2. If a song is playing other than the one clicked OR no song is playing: set the song number to new song, display the pause button on the clicked song, and set a new song to play.
-    if (clickedSongNumber !== currentlyPlayingSongNumber) {
-
-      currentlyPlayingSongNumber = clickedSongNumber;
-
-      $(this).html(pauseButtonTemplate);
-
-      // 3. Otherwise the currently playing song was clicked. Now no song should be playing.
-    } else {
-      currentlyPlayingSongNumber = null;
-    }
-  };
+  var $row = $(template);
 
   $row.find('.song-item-number').click(handleSongClick);
   $row.hover(onHover, offHover);
@@ -86,10 +81,20 @@ var setCurrentAlbum = function(album) {
   }
 };
 
+var setSong = function (songNumber) {
+  var songURL = currentAlbum.songs[currentlyPlayingSongNumber - 1].audioURL;
+
+  currentSoundFile = new buzz.sound(songURL, {
+    formats: [ 'mp3' ],
+    preload: true,
+  });
+};
+
+var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
+var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
+
 var currentlyPlayingSongNumber = null;
 var currentAlbum = null;
-
-var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
-var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
+var currentSoundFile = null;
 
 setCurrentAlbum(albums[0]);
