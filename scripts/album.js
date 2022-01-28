@@ -9,25 +9,34 @@ var createSongRow = function (songNumber, songName, songLength) {
   var handleSongClick = function () {
     var clickedSongNumber = $(this).attr('data-song-number');
 
-    //1. If there is a song currently playing, remove its pause button
+    //1. If there is a song currently playing, reset its pause button to its number
     if (currentlyPlayingSongNumber !== null) {
       var currentlyPlayingCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
-      
       currentlyPlayingCell.html(currentlyPlayingSongNumber);
     }
     
-    //2. If a song is playing other than the one clicked OR no song is playing: set the song number to new song, display the pause button on the clicked song, and set a new song to play.
+    //2. If a song is playing other than the one clicked OR no song is playing:
     if (clickedSongNumber !== currentlyPlayingSongNumber) {
-
       currentlyPlayingSongNumber = clickedSongNumber;
+      // if (!pausedSong) {
+      //   setSong(songNumber);
+      // } 
       setSong(songNumber);
       currentSoundFile.play();
       $(this).html(pauseButtonTemplate);
 
-      // 3. Otherwise there is a currently playing song and it was clicked. Now no song should be playing.
+      // 3. Otherwise there is a currently playing song and it was clicked. 
     } else {
-      currentlyPlayingSongNumber = null;
-      $(this).html(clickedSongNumber);
+      // pausedSong = currentlyPlayingSongNumber;
+      // currentlyPlayingSongNumber = null;
+      if (currentSoundFile.isPaused()) {
+        currentSoundFile.play();
+        $(this).html(pauseButtonTemplate);
+      } else {
+        currentSoundFile.pause();
+        $(this).html(playButtonTemplate);
+      }
+      
     }
   };
 
@@ -82,9 +91,13 @@ var setCurrentAlbum = function(album) {
 };
 
 var setSong = function (songNumber) {
-  var songUrL = currentAlbum.songs[currentlyPlayingSongNumber - 1].audioUrL;
+  if (currentSoundFile) {
+    currentSoundFile.stop();
+  }
 
-  currentSoundFile = new buzz.sound(songUrL, {
+  var songUrl = currentAlbum.songs[currentlyPlayingSongNumber - 1].audioUrl;
+
+  currentSoundFile = new buzz.sound(songUrl, {
     formats: [ 'mp3' ],
     preload: true,
   });
@@ -96,5 +109,6 @@ var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause">
 var currentlyPlayingSongNumber = null;
 var currentSoundFile = null;
 var currentAlbum = null;
+var pausedSong = null;
 
 setCurrentAlbum(albums[0]);
