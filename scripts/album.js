@@ -28,7 +28,9 @@ var createSongRow = function (songNumber, songName, songLength) {
       songItem.html(songNumber);
     }
   };
-  
+
+
+
   var handleSongClick = function () {
     var clickedSongNumber = $(this).attr('data-song-number');
 
@@ -51,11 +53,6 @@ var createSongRow = function (songNumber, songName, songLength) {
       currentlyPlayingSongNumber = null;
       $(this).html(clickedSongNumber);
     }
-
-
-    var clickedSongNumber = $(this).attr('data-song-number');
-    currentlyPlayingSongNumber = clickedSongNumber;
-    $(this).html(pauseButtonTemplate);
   };
 
   $row.find('.song-item-number').click(handleSongClick);
