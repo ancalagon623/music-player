@@ -82,9 +82,9 @@ var setCurrentAlbum = function(album) {
 };
 
 var setSong = function (songNumber) {
-  var songURL = currentAlbum.songs[currentlyPlayingSongNumber - 1].audioURL;
+  var songUrL = currentAlbum.songs[currentlyPlayingSongNumber - 1].audioUrL;
 
-  currentSoundFile = new buzz.sound(songURL, {
+  currentSoundFile = new buzz.sound(songUrL, {
     formats: [ 'mp3' ],
     preload: true,
   });
