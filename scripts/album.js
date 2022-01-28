@@ -1,3 +1,7 @@
+var setSong = function (songNumber) {
+
+};
+
 var createSongRow = function (songNumber, songName, songLength) {
   var template =
      '<tr class="album-view-song-item">'
@@ -34,24 +38,23 @@ var createSongRow = function (songNumber, songName, songLength) {
   var handleSongClick = function () {
     var clickedSongNumber = $(this).attr('data-song-number');
 
-    //1. There is a song currently playing
+    //1. If there is a song currently playing, remove its pause button
     if (currentlyPlayingSongNumber !== null) {
       var currentlyPlayingCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
 
       currentlyPlayingCell.html(currentlyPlayingSongNumber);
     }
     
-    //2. There is a song currently playing, but a different one was clicked to play
+    //2. If a song is playing other than the one clicked OR no song is playing: set the song number to new song, display the pause button on the clicked song, and set a new song to play.
     if (clickedSongNumber !== currentlyPlayingSongNumber) {
 
       currentlyPlayingSongNumber = clickedSongNumber;
 
       $(this).html(pauseButtonTemplate);
 
-      // 3. The currently playing song was clicked
+      // 3. Otherwise the currently playing song was clicked. Now no song should be playing.
     } else {
       currentlyPlayingSongNumber = null;
-      $(this).html(clickedSongNumber);
     }
   };
 
