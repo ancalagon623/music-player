@@ -91,6 +91,18 @@ var setCurrentAlbum = function(album) {
 };
 
 var setSong = function (songNumber) {
+  
+  var $songName = $('.song-name');
+  var $songArtist = $('.artist-name');
+  var $totalTime = $('.total-time');
+
+  var songLength = currentAlbum.songs[songNumber - 1].duration;
+  var extraZero = songLength % 60 < 10 ? '0' : '';
+
+  $songName.text(currentAlbum.songs[songNumber - 1].title);
+  $songArtist.text(currentAlbum.artist);
+  $totalTime.text(Math.floor(songLength / 60) + ':' + extraZero + songLength % 60);
+  
   if (currentSoundFile) {
     currentSoundFile.stop();
   }
@@ -100,7 +112,7 @@ var setSong = function (songNumber) {
   currentSoundFile = new buzz.sound(songUrl, {
     formats: [ 'mp3' ],
     preload: true,
-  });
+  }); 
 };
 
 var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
@@ -109,6 +121,6 @@ var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause">
 var currentlyPlayingSongNumber = null;
 var currentSoundFile = null;
 var currentAlbum = null;
-var pausedSong = null;
+// var pausedSong = null;
 
 setCurrentAlbum(albums[0]);
