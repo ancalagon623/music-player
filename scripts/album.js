@@ -1,7 +1,7 @@
 var createSongRow = function (songNumber, songName, songLength) {
   var template =
      '<tr class="album-view-song-item">'
-   + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
+   + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber +  '  </td>'
    + '  <td class="song-item-title">' + songName + '</td>'
    + '  <td class="song-item-duration">' + songLength + '</td>'
    + '</tr>';
@@ -94,7 +94,7 @@ var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></
 var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
 
 var currentlyPlayingSongNumber = null;
-var currentAlbum = null;
 var currentSoundFile = null;
+var currentAlbum = null;
 
 setCurrentAlbum(albums[0]);
